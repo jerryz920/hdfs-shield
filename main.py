@@ -28,15 +28,6 @@ def upload_hdfs():
             frequest.files["file"],
             frequest.form["tagname"])
 
-@app.route('/define_tag', methods=['PUT', 'POST'])
-def define_tag():
-    return define_tag(
-            myid,
-            safe_url,
-            utils.keyhash(frequest.environ["peercert"]),
-            frequest.form["tagname"],
-            frequest.form["policy"])
-
 
 if __name__ == "__main__":
     run(app, "0.0.0.0", 20000, ca_cert, cert, key)

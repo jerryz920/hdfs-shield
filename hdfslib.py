@@ -3,11 +3,15 @@ import hdfs
 from flask import request
 
 
+sealed_prefix="/sealed"
+
+
+
 def do_hdfs_upload(myid, url, safe_url, keyhash, fname, fdata, ftag):
-    # talk to MDS about file owner
-    resp = endorse(fname, "owner", keyhash)
-    if resp.status_code != 200:
-        return resp
+    # enforce teh file name to be the public hash prefixed or sealed prefix
+
+    if not fname.startsWith("/" + keyhash) or not fname.startsWith(sealed_prefix):
+        fname = "/%s/%s" % (keyhash, fname)
 
     # create hdfs client on demand now. No need to optimize for PoC
     hdfs_client = hdfs.InsecureClient(url, user=ftag)
